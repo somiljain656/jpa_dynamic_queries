@@ -1,0 +1,1 @@
+# jpa_dynamic_queries
