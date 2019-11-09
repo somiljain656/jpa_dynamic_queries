@@ -41,7 +41,7 @@ public class Customer
 	@Id
 	@GeneratedValue
 	@Column(name = "customer_id")
-	private Long customerId;
+	private Integer customerId;
 	
 	@NotNull
 	@Column(name = "customer_name")
