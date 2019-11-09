@@ -13,6 +13,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -36,8 +37,9 @@ public class Product
 	@Id
 	@GeneratedValue
 	@Column(name = "product_id")
-	private Long productId;
-
+	private Integer productId;
+	
+	@NotNull
 	@Column(name = "product_name")
 	private String productName;
 
@@ -49,12 +51,12 @@ public class Product
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@LastModifiedDate
-	@Column(name = "modifiedOn")
+	@Column(name = "modified_on")
 	private Calendar modifiedOn;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
-	@Column(name = "createdOn")
+	@Column(name = "created_on")
 	private Calendar createdOn;
 
 	/*

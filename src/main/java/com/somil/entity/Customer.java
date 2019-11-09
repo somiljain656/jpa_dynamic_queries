@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -30,7 +31,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "customer", uniqueConstraints = {@UniqueConstraint(columnNames = { "mobileNumber"},name = "customer_data")})
+@Table(name = "customer", uniqueConstraints = {@UniqueConstraint(columnNames = { "mobileNumber"},name = "uk_mobile_number")})
 @EntityListeners(AuditingEntityListener.class)
 public class Customer 
 	implements Serializable {
@@ -41,10 +42,12 @@ public class Customer
 	@GeneratedValue
 	@Column(name = "customer_id")
 	private Long customerId;
-
+	
+	@NotNull
 	@Column(name = "customer_name")
 	private String customerName;
 
+	@NotNull
 	@Column(name = "mobile_number")
 	private String mobileNumber;
 
@@ -62,12 +65,12 @@ public class Customer
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@LastModifiedDate
-	@Column(name = "modifiedOn")
+	@Column(name = "modified_on")
 	private Calendar modifiedOn;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
-	@Column(name = "createdOn")
+	@Column(name = "created_on")
 	private Calendar createdOn;
 
 	/*

@@ -6,12 +6,16 @@ import java.util.Calendar;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -24,7 +28,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @EntityListeners(AuditingEntityListener.class)
 public class Order 	
 	implements Serializable {
@@ -34,11 +38,21 @@ public class Order
 	@Id
 	@GeneratedValue
 	@Column(name = "order_id")
-	private Long orderId;
+	private Integer orderId;
+	
+	@ManyToOne
+	@NotNull
+	@JoinColumn(name = "customer_id", foreignKey = @ForeignKey(name = "order_customer_fk"))
+	private Customer customer;
+	
+	@ManyToOne
+	@NotNull
+	@JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "order_product_fk"))
+	private Product product;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
-	@Column(name = "createdOn")
+	@Column(name = "created_on")
 	private Calendar createdOn;
 
 	/*
