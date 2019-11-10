@@ -35,4 +35,10 @@ public class DataServiceImpl
 		
 	}
 
+	@Override
+	public Integer insertCustomerData(Customer customer) {
+		System.out.println("here");
+		return customerCrudService.insertCustomerData(customer).getCustomerId();
+	}
+
 }

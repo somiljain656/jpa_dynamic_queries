@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -31,7 +32,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "customer", uniqueConstraints = {@UniqueConstraint(columnNames = { "mobileNumber"},name = "uk_mobile_number")})
+@Table(name = "customer", uniqueConstraints = {@UniqueConstraint(columnNames = { "mobile_number"},name = "uk_mobile_number")})
 @EntityListeners(AuditingEntityListener.class)
 public class Customer 
 	implements Serializable {
@@ -39,7 +40,7 @@ public class Customer
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "customer_id")
 	private Integer customerId;
 	

@@ -4,6 +4,8 @@ import com.somil.entity.Customer;
 
 public interface DataService {
 
-	Customer getCustomerByMobileNumber(String mobileNumber);
+	public Customer getCustomerByMobileNumber(String mobileNumber);
+	
+	public Integer insertCustomerData(Customer customer);
 
 }
