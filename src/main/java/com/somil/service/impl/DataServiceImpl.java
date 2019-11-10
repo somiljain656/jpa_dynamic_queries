@@ -1,10 +1,14 @@
 package com.somil.service.impl;
 
+import java.util.Calendar;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.somil.constants.QueryTypeEnum;
 import com.somil.crud.service.CustomerCrudService;
 import com.somil.crud.service.OrderCrudService;
 import com.somil.crud.service.ProductCrudService;
@@ -48,6 +52,32 @@ public class DataServiceImpl
 		Customer filter = new Customer();
 		filter.setMobileNumber(mobileNumber);
 		return customerCrudService.retrieveCustomerData(filter);
+	}
+	
+	@Override
+	public List<Product> getProductAbovePrice(Double price) {
+		Product filter = new Product();
+		filter.setPriceQueryType(QueryTypeEnum.GREATER);
+		filter.setProductPrice(price);
+		return productCrudService.retrieveProductDataList(filter, null, null);
+	}
+	
+	@Override
+	public List<Order> getOrdersBelowPrice(Double price) {
+		Order filter = new Order();
+		filter.setPriceQueryType(QueryTypeEnum.LESS);
+		filter.setTotalPrice(price);
+		return orderCrudService.retrieveOrderDataList(filter, null, null);
+	}
+	
+	
+	@Override
+	public List<Order> getOrderBetweenDates(Calendar startDate, Calendar endDate) {
+		Order filter = new Order();
+		filter.setStartDate(startDate);
+		filter.setEndDate(endDate);
+		filter.setDateQueryType(QueryTypeEnum.BETWEEN);
+		return orderCrudService.retrieveOrderDataList(filter, null, null);
 	}
 
 }
