@@ -16,6 +16,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -63,5 +64,11 @@ public class Order
 	public void setCreationTime() {
 		this.setCreatedOn(Calendar.getInstance());
 	}
+	
+	@Transient
+	private Integer customerId;
+	
+	@Transient
+	private Integer productId;
 
 }
