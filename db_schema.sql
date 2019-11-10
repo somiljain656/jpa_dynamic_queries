@@ -43,7 +43,7 @@ CREATE TABLE public.product
 (
    product_id SERIAL,
    product_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
-   product_price double precision,
+   product_price double precision NOT NULL,
    modified_on timestamp without time zone,
    created_on timestamp without time zone,
    CONSTRAINT product_pkey PRIMARY KEY (product_id)
@@ -66,6 +66,8 @@ CREATE TABLE public.orders
    order_id SERIAL,
    customer_id bigint NOT NULL,
    product_id bigint NOT NULL,
+   quantity  integer NOT NULL
+   total_price double precision NOT NULL		
    created_on timestamp without time zone,
    CONSTRAINT order_pkey PRIMARY KEY (order_id),
    CONSTRAINT order_customer_fk FOREIGN KEY (customer_id)

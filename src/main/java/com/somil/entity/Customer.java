@@ -14,12 +14,15 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.somil.constants.QueryTypeEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -73,6 +76,9 @@ public class Customer
 	@CreatedDate
 	@Column(name = "created_on")
 	private Calendar createdOn;
+	
+	@Transient
+	private QueryTypeEnum customerNameQueryType;
 
 	/*
 	 *  To be called before every new customer insertion  

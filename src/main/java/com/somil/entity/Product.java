@@ -14,11 +14,14 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.somil.constants.QueryTypeEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -44,6 +47,7 @@ public class Product
 	@Column(name = "product_name")
 	private String productName;
 
+	@NotNull
 	@Column(name = "product_price")
 	private Double productPrice;
 
@@ -59,6 +63,9 @@ public class Product
 	@CreatedDate
 	@Column(name = "created_on")
 	private Calendar createdOn;
+	
+	@Transient
+	private QueryTypeEnum priceQueryType;
 
 	/*
 	 *  To be called before every new product insertion  

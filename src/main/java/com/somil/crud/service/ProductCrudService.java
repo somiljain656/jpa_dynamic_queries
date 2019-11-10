@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.somil.constants.QueryTypeEnum;
 import com.somil.entity.Product;
 import com.somil.repositories.ProductRepository;
 
@@ -28,22 +29,50 @@ public class ProductCrudService {
 	@Autowired
 	private ProductRepository repository;
 
+	
+	/**
+	 * Method to save single product data 
+	 * @param productData
+	 * @return
+	 */
 	public Product insertProductData(Product productData) {
 		return repository.save(productData);
 	}
 
+	/**
+	 * Method to save multiple product data
+	 * @param productDataList
+	 * @return
+	 */
 	public List<Product> insertProductDataList(List<Product> productDataList) {
 		return repository.save(productDataList);
 	}
 	
+    /**
+     * Method to get count of records matching filter
+     * @param filter
+     * @return count of records matching filter in DB 
+     */
     public long getProductDataCount(Product filter) {
         return (long) repository.count(spec(filter));
     }
 
+    /**
+     * Method to get product or null matching filter
+     * @param filter
+     * @return product matching filter or null in DB 
+     */
     public Product retrieveProductData(Product filter) {
         return repository.findOne(spec(filter));
     }
 
+    /**
+     * Method to get list of products matching filter
+     * @param filter
+     * @param limit
+     * @param offset
+     * @return list of products records matching filter in DB
+     */
     public List<Product> retrieveProductDataList(Product filter, Integer limit, Integer offset) {
 
         if (filter == null) {
@@ -54,11 +83,15 @@ public class ProductCrudService {
         if (limit == null || offset == null) {
             return repository.findAll(spec(filter));
         }
-        Page<Product> dataList = repository.findAll(spec(filter),
-            new PageRequest(offset, limit));
+        Page<Product> dataList = repository.findAll(spec(filter), new PageRequest(offset, limit));
         return dataList.getContent();
     }
 
+    /**
+     * prepares where clause for sql query
+     * @param filter
+     * @return specification from order filter
+     */
     private Specification<Product> spec(Product filter) {
 
         return new Specification<Product>() {
@@ -77,9 +110,15 @@ public class ProductCrudService {
                     if (filter.getProductName() != null) {
                         predicates.add(cb.equal(root.get("productName"), filter.getProductName()));
                     }
-
-                    if (filter.getProductPrice() != null) {
-                        predicates.add(cb.equal(root.get("productPrice"), filter.getProductPrice()));
+                    
+                    if (filter.getPriceQueryType() != null && filter.getProductPrice() != null) {
+                 	   if (filter.getPriceQueryType().equals(QueryTypeEnum.EQUAL)) {
+                            predicates.add(cb.equal(root.get("productPrice"), filter.getProductPrice()));
+                 	   } else if (filter.getPriceQueryType().equals(QueryTypeEnum.GREATER)) {
+                            predicates.add(cb.greaterThanOrEqualTo(root.get("productPrice"), filter.getProductPrice()));
+                 	   } else if (filter.getPriceQueryType().equals(QueryTypeEnum.LESS)) {
+                            predicates.add(cb.lessThanOrEqualTo(root.get("productPrice"), filter.getProductPrice()));
+                 	   }
                     }
 
                 }
