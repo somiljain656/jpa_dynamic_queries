@@ -70,7 +70,6 @@ public class DataServiceImpl
 		return orderCrudService.retrieveOrderDataList(filter, null, null);
 	}
 	
-	
 	@Override
 	public List<Order> getOrderBetweenDates(Calendar startDate, Calendar endDate) {
 		Order filter = new Order();

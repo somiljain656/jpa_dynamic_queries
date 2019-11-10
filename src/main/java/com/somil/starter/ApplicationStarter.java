@@ -12,7 +12,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.somil.entity.Customer;
 import com.somil.service.DataService;
 
 @Component
@@ -37,20 +36,15 @@ public class ApplicationStarter {
     }
     
     private void test() {
-    	
-    	Customer customer = new Customer();
-    	customer.setCustomerName("David");
-    	customer.setMobileNumber("2345167891");
-    	customer.setAddress("23 Street, Sector 50, Malad");
-    	customer.setCity("Mumbai");
-    	customer.setState("Maharastra");
-    	customer.setCountry("India");
-    	
-    	System.out.println(customer);
-    	
-    	System.out.println(dataService.insertCustomerData(customer));
-    	System.out.println("SJXX ::"+dataService.getCustomerByMobileNumber("2345167891"));
-    	
+    	getProductBetweenPriceRange();
     }
-  
+    
+
+    
+    private void getProductBetweenPriceRange() {
+    	
+    	System.out.println(dataService.getProductAbovePrice(45d));
+    }
+    
+    
 }
