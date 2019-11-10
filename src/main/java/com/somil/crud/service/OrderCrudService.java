@@ -23,12 +23,12 @@ import com.somil.repositories.OrderRepository;
 
 @Service
 public class OrderCrudService {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(OrderCrudService.class);
 
 	@Autowired
 	private OrderRepository repository;
-	
+
 	/**
 	 * Method to save single order data 
 	 * @param orderData
@@ -46,99 +46,99 @@ public class OrderCrudService {
 	public List<Order> insertOrderDataList(List<Order> orderDataList) {
 		return repository.save(orderDataList);
 	}
-	
-    /**
-     * Method to get count of records matching filter
-     * @param filter
-     * @return count of records matching filter in DB 
-     */
-    public long getOrderDataCount(Order filter) {
-        return (long) repository.count(spec(filter));
-    }
 
-    /**
-     * Method to get order or null matching filter
-     * @param filter
-     * @return order matching filter or null in DB 
-     */
-    public Order retrieveOrderData(Order filter) {
-        return repository.findOne(spec(filter));
-    }
+	/**
+	 * Method to get count of records matching filter
+	 * @param filter
+	 * @return count of records matching filter in DB 
+	 */
+	public long getOrderDataCount(Order filter) {
+		return (long) repository.count(spec(filter));
+	}
 
-    /**
-     * Method to get list of orders matching filter
-     * @param filter
-     * @param limit
-     * @param offset
-     * @return list of orders records matching filter in DB
-     */
-    public List<Order> retrieveOrderDataList(Order filter, Integer limit, Integer offset) {
+	/**
+	 * Method to get order or null matching filter
+	 * @param filter
+	 * @return order matching filter or null in DB 
+	 */
+	public Order retrieveOrderData(Order filter) {
+		return repository.findOne(spec(filter));
+	}
 
-        if (filter == null) {
-            LOGGER.error("Filter can't be null, returning empty list");
-            return Collections.emptyList();
-        }
+	/**
+	 * Method to get list of orders matching filter
+	 * @param filter
+	 * @param limit
+	 * @param offset
+	 * @return list of orders records matching filter in DB
+	 */
+	public List<Order> retrieveOrderDataList(Order filter, Integer limit, Integer offset) {
 
-        if (limit == null || offset == null) {
-            return repository.findAll(spec(filter));
-        }
-        Page<Order> dataList = repository.findAll(spec(filter), new PageRequest(offset, limit));
-        return dataList.getContent();
-    }
+		if (filter == null) {
+			LOGGER.error("Filter can't be null, returning empty list");
+			return Collections.emptyList();
+		}
 
-    /**
-     * prepares where clause for sql query
-     * @param filter
-     * @return specification from order filter
-     */
-    private Specification<Order> spec(Order filter) {
+		if (limit == null || offset == null) {
+			return repository.findAll(spec(filter));
+		}
+		Page<Order> dataList = repository.findAll(spec(filter), new PageRequest(offset, limit));
+		return dataList.getContent();
+	}
 
-        return new Specification<Order>() {
+	/**
+	 * prepares where clause for sql query
+	 * @param filter
+	 * @return specification from order filter
+	 */
+	private Specification<Order> spec(Order filter) {
 
-            @Override
-            public Predicate toPredicate(Root<Order> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+		return new Specification<Order>() {
 
-                List<Predicate> predicates = new ArrayList<>();
+			@Override
+			public Predicate toPredicate(Root<Order> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
-                if (filter != null) {
-                
-                   if (filter.getOrderId() != null) {
-                        predicates.add(cb.equal(root.get("orderId"), filter.getOrderId()));
-                   }
-                   
-                   if (filter.getCustomerId() != null) {
-                	   predicates.add(cb.equal(root.get("customer").get("customerId"), filter.getCustomerId()));
-                   }
-                   
-                   if (filter.getProductId() != null) {
-                	   predicates.add(cb.equal(root.get("product").get("productId"), filter.getProductId()));
-                   }
-                   
-                   if (filter.getQuantity() != null) {
-                       predicates.add(cb.equal(root.get("quantity"), filter.getQuantity()));
-                   }
-                   
-                   if (filter.getPriceQueryType() != null && filter.getTotalPrice() != null) {
-                	   if (filter.getPriceQueryType().equals(QueryTypeEnum.EQUAL)) {
-                           predicates.add(cb.equal(root.get("totalPrice"), filter.getTotalPrice()));
-                	   } else if (filter.getPriceQueryType().equals(QueryTypeEnum.GREATER)) {
-                           predicates.add(cb.greaterThanOrEqualTo(root.get("totalPrice"), filter.getTotalPrice()));
-                	   } else if (filter.getPriceQueryType().equals(QueryTypeEnum.LESS)) {
-                           predicates.add(cb.lessThanOrEqualTo(root.get("totalPrice"), filter.getTotalPrice()));
-                	   }
-                   }
-                   
-                   if (filter.getDateQueryType() != null) {
-                       if (filter.getDateQueryType().equals(QueryTypeEnum.EQUAL) && filter.getCreatedOn() != null) {
-                           predicates.add(cb.equal(root.get("createdOn"), filter.getCreatedOn()));
-                       } else if (filter.getDateQueryType().equals(QueryTypeEnum.BETWEEN) && filter.getStartDate() != null && filter.getEndDate() != null) {
-                           predicates.add(cb.between(root.get("createdOn"), filter.getStartDate(), filter.getEndDate()));
-                       }
-                   }
-                   
-                }
-                return cb.and(predicates.toArray(new Predicate[0]));
-            }
-        };
-    }
+				List<Predicate> predicates = new ArrayList<>();
+
+				if (filter != null) {
+
+					if (filter.getOrderId() != null) {
+						predicates.add(cb.equal(root.get("orderId"), filter.getOrderId()));
+					}
+
+					if (filter.getCustomerId() != null) {
+						predicates.add(cb.equal(root.get("customer").get("customerId"), filter.getCustomerId()));
+					}
+
+					if (filter.getProductId() != null) {
+						predicates.add(cb.equal(root.get("product").get("productId"), filter.getProductId()));
+					}
+
+					if (filter.getQuantity() != null) {
+						predicates.add(cb.equal(root.get("quantity"), filter.getQuantity()));
+					}
+
+					if (filter.getPriceQueryType() != null && filter.getTotalPrice() != null) {
+						if (filter.getPriceQueryType().equals(QueryTypeEnum.EQUAL)) {
+							predicates.add(cb.equal(root.get("totalPrice"), filter.getTotalPrice()));
+						} else if (filter.getPriceQueryType().equals(QueryTypeEnum.GREATER)) {
+							predicates.add(cb.greaterThanOrEqualTo(root.get("totalPrice"), filter.getTotalPrice()));
+						} else if (filter.getPriceQueryType().equals(QueryTypeEnum.LESS)) {
+							predicates.add(cb.lessThanOrEqualTo(root.get("totalPrice"), filter.getTotalPrice()));
+						}
+					}
+
+					if (filter.getDateQueryType() != null) {
+						if (filter.getDateQueryType().equals(QueryTypeEnum.EQUAL) && filter.getCreatedOn() != null) {
+							predicates.add(cb.equal(root.get("createdOn"), filter.getCreatedOn()));
+						} else if (filter.getDateQueryType().equals(QueryTypeEnum.BETWEEN) && filter.getStartDate() != null && filter.getEndDate() != null) {
+							predicates.add(cb.between(root.get("createdOn"), filter.getStartDate(), filter.getEndDate()));
+						}
+					}
+
+				}
+				return cb.and(predicates.toArray(new Predicate[0]));
+			}
+		};
+	}
 }

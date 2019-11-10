@@ -23,12 +23,12 @@ import com.somil.repositories.CustomerRepository;
 
 @Service
 public class CustomerCrudService {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProductCrudService.class);
 
 	@Autowired
 	private CustomerRepository repository;
-	
+
 	/**
 	 * Method to save single customer data 
 	 * @param customerData
@@ -46,81 +46,81 @@ public class CustomerCrudService {
 	public List<Customer> insertCustomerDataList(List<Customer> customerDataList) {
 		return repository.save(customerDataList);
 	}
-	
-    /**
-     * Method to get count of records matching filter
-     * @param filter
-     * @return count of records matching filter in DB 
-     */
-    public long getCustomerDataCount(Customer filter) {
-        return (long) repository.count(spec(filter));
-    }
 
-    /**
-     * Method to get customer or null matching filter
-     * @param filter
-     * @return customer matching filter or null in DB 
-     */
-    public Customer retrieveCustomerData(Customer filter) {
-        return repository.findOne(spec(filter));
-    }
+	/**
+	 * Method to get count of records matching filter
+	 * @param filter
+	 * @return count of records matching filter in DB 
+	 */
+	public long getCustomerDataCount(Customer filter) {
+		return (long) repository.count(spec(filter));
+	}
 
-    /**
-     * Method to get list of customers matching filter
-     * @param filter
-     * @param limit
-     * @param offset
-     * @return list of customers records matching filter in DB
-     */
-    public List<Customer> retrieveCustomerDataList(Customer filter, Integer limit, Integer offset) {
+	/**
+	 * Method to get customer or null matching filter
+	 * @param filter
+	 * @return customer matching filter or null in DB 
+	 */
+	public Customer retrieveCustomerData(Customer filter) {
+		return repository.findOne(spec(filter));
+	}
 
-        if (filter == null) {
-            LOGGER.error("Filter can't be null, returning empty list");
-            return Collections.emptyList();
-        }
+	/**
+	 * Method to get list of customers matching filter
+	 * @param filter
+	 * @param limit
+	 * @param offset
+	 * @return list of customers records matching filter in DB
+	 */
+	public List<Customer> retrieveCustomerDataList(Customer filter, Integer limit, Integer offset) {
 
-        if (limit == null || offset == null) {
-            return repository.findAll(spec(filter));
-        }
-        Page<Customer> dataList = repository.findAll(spec(filter),new PageRequest(offset, limit));
-        return dataList.getContent();
-    }
+		if (filter == null) {
+			LOGGER.error("Filter can't be null, returning empty list");
+			return Collections.emptyList();
+		}
 
-    /**
-     * prepares where clause for sql query
-     * @param filter
-     * @return specification from customer filter
-     */
-    private Specification<Customer> spec(Customer filter) {
+		if (limit == null || offset == null) {
+			return repository.findAll(spec(filter));
+		}
+		Page<Customer> dataList = repository.findAll(spec(filter),new PageRequest(offset, limit));
+		return dataList.getContent();
+	}
 
-        return new Specification<Customer>() {
+	/**
+	 * prepares where clause for sql query
+	 * @param filter
+	 * @return specification from customer filter
+	 */
+	private Specification<Customer> spec(Customer filter) {
 
-            @Override
-            public Predicate toPredicate(Root<Customer> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+		return new Specification<Customer>() {
 
-                List<Predicate> predicates = new ArrayList<>();
+			@Override
+			public Predicate toPredicate(Root<Customer> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
-                if (filter != null) {
-                
-                    if (filter.getCustomerId() != null) {
-                        predicates.add(cb.equal(root.get("customerId"), filter.getCustomerId()));
-                    }
-                    
-                    if (filter.getCustomerNameQueryType() != null && filter.getCustomerName() != null) {
-                        if (filter.getCustomerNameQueryType().equals(QueryTypeEnum.EQUAL)) {
-                            predicates.add(cb.equal(root.get("customerName"), filter.getCustomerName()));
-                        } else if (filter.getCustomerNameQueryType().equals(QueryTypeEnum.LIKE)) {
-                        	predicates.add(cb.like(root.get("customerName"), filter.getCustomerName()));
-                        }
-                    }
+				List<Predicate> predicates = new ArrayList<>();
 
-                    if (filter.getMobileNumber() != null) {
-                        predicates.add(cb.equal(root.get("mobileNumber"), filter.getMobileNumber()));
-                    }
+				if (filter != null) {
 
-                }
-                return cb.and(predicates.toArray(new Predicate[0]));
-            }
-        };
-    }
+					if (filter.getCustomerId() != null) {
+						predicates.add(cb.equal(root.get("customerId"), filter.getCustomerId()));
+					}
+
+					if (filter.getCustomerNameQueryType() != null && filter.getCustomerName() != null) {
+						if (filter.getCustomerNameQueryType().equals(QueryTypeEnum.EQUAL)) {
+							predicates.add(cb.equal(root.get("customerName"), filter.getCustomerName()));
+						} else if (filter.getCustomerNameQueryType().equals(QueryTypeEnum.LIKE)) {
+							predicates.add(cb.like(root.get("customerName"), filter.getCustomerName()));
+						}
+					}
+
+					if (filter.getMobileNumber() != null) {
+						predicates.add(cb.equal(root.get("mobileNumber"), filter.getMobileNumber()));
+					}
+
+				}
+				return cb.and(predicates.toArray(new Predicate[0]));
+			}
+		};
+	}
 }

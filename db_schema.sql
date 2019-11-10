@@ -66,8 +66,8 @@ CREATE TABLE public.orders
    order_id SERIAL,
    customer_id bigint NOT NULL,
    product_id bigint NOT NULL,
-   quantity  integer NOT NULL
-   total_price double precision NOT NULL		
+   quantity  integer NOT NULL,
+   total_price double precision NOT NULL,		
    created_on timestamp without time zone,
    CONSTRAINT order_pkey PRIMARY KEY (order_id),
    CONSTRAINT order_customer_fk FOREIGN KEY (customer_id)
